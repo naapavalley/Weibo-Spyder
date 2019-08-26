@@ -10,7 +10,9 @@ from bs4 import BeautifulSoup
 import numpy as np
 from scipy import *
 import time
+import re
 
+fileName = 'cuiyutao.txt'
 
 def simulate_logging():
     try:
@@ -41,7 +43,7 @@ def simulate_logging():
         return browser
 def spyder_weibo(browser):
     # 本文是以GUCCI为例，GUCCI的用户id为‘GUCCI’
-    id = 'u/6711553429'
+    id = 'cuiyutao'
     niCheng = id
     # 用户的url结构为 url = 'http://weibo.cn/' + id
     url = 'http://weibo.cn/' + id
@@ -69,7 +71,7 @@ def spyder_weibo(browser):
     # 通过循环来抓取每一页数据
     for i in range(1, int(pageSize) + 1):  # pageSize+1
      # 每一页数据的url结构为 url = 'http://weibo.cn/' + id + ‘?page=’ + i
-        url = 'https://weibo.cn/u/6711553429?page=' + str(i)
+        url = 'https://weibo.cn/cuiyutao?page=' + str(i)
         browser.get(url)
         time.sleep(1)
         # 使用BeautifulSoup解析网页的HTML
@@ -83,7 +85,14 @@ def spyder_weibo(browser):
             # 这里有三种情况，两种为原创，一种为转发
             if (len(div) == 2):#原创，有图
                 # #爬取微博内容
-                content = div[0].find('span', attrs={'class': 'ctt'}).getText()
+                content = div[0].find('span', attrs={'class' : 'ctt'}).getText()
+                for i in range(0, len(div)):
+                    if '转发理由' in div[i].getText():
+                        content2 = list(div[i].stripped_strings)[1]
+                        topic = div[i].find('a').getText()
+                    else:
+                        content2 = ''
+                        topic = ''
                 aa = div[1].find_all('a')
                 for a in aa:
                     text = a.getText()
@@ -96,7 +105,12 @@ def spyder_weibo(browser):
                             zhuanFa = (text.split('[')[1]).replace(']', '')
                          # 爬取评论数目
                         elif ('评论' in text):
-                            pinLun = (text.split('[')[1]).replace(']', '')    
+                            try:
+                                pinLun = (text.split('[')[1]).replace(']', '')
+                            except:
+                                pinglun = '-'
+                            else:
+                                pass
                  # 爬取微博来源和时间
                 span = divs.find('span', attrs={'class': 'ct'}).getText()
                 faBuTime = str(span.split('来自')[0])
@@ -109,6 +123,13 @@ def spyder_weibo(browser):
 			# 和上面一样
             elif (len(div) == 1):# 原创，无图
                 content = div[0].find('span', attrs={'class': 'ctt'}).getText()
+                for i in range(0, len(div)):
+                    if '转发理由' in div[i].getText():
+                        content2 = list(div[i].stripped_strings)[1]
+                        topic = div[i].find('a').getText()
+                    else:
+                        content2 = ''
+                        topic = ''
                 aa = div[0].find_all('a')
                 for a in aa:
                     text = a.getText()
@@ -132,6 +153,13 @@ def spyder_weibo(browser):
             elif (len(div) == 3):# 转发的微博
                 yuanChuang = '0'
                 content = div[0].find('span', attrs={'class': 'ctt'}).getText()
+                for i in range(0, len(div)):
+                    if '转发理由' in div[i].getText():
+                        content2 = list(div[i].stripped_strings)[1]
+                        topic = div[i].find('a').getText()
+                    else:
+                        content2 = ''
+                        topic = ''
                 aa = div[2].find_all('a')
                 for a in aa:
                     text = a.getText()
@@ -141,7 +169,12 @@ def spyder_weibo(browser):
                         elif ('转发' in text):
                             zhuanFa = (text.split('[')[1]).replace(']', '')
                         elif ('评论' in text):
-                            pinLun = (text.split('[')[1]).replace(']', '')
+                            try:
+                                pinLun = (text.split('[')[1]).replace(']', '')
+                            except:
+                                pingLun = ''
+                            else:
+                                pass
                 span = divs.find('span', attrs={'class': 'ct'}).getText()
                 faBuTime = str(span.split('来自')[0])
                 try:
@@ -150,13 +183,14 @@ def spyder_weibo(browser):
                     laiYuan = ''
                 else:
                     pass
+            print("%s %s %s %s %s %s %s %s %s %s %s %s %s"%(uid, fenSiCount, guanZhuCount, weiBoCount, content, content2, topic, zhuanFa, pinLun, dianZan, faBuTime, laiYuan, yuanChuang))
+            with open(fileName, 'a', encoding='utf-8') as fh:
+                fh.write(uid + '$' + fenSiCount + '$' + guanZhuCount + '$' + weiBoCount + '$' + content + '$' + content2 + '$' + topic + '$'+ zhuanFa + '$' + pinLun + '$' + dianZan + '$' + faBuTime + '$' + laiYuan + '$' + yuanChuang + '$' + url + "\n")
         time.sleep(2)
-        print("%s %s %s %s %s %s %s %s %s %s %s"%(uid, fenSiCount, guanZhuCount, weiBoCount, content, zhuanFa, pinLun, dianZan, faBuTime, laiYuan, yuanChuang))
-
 
 if __name__ == '__main__':
 
     browser = simulate_logging()
     spyder_weibo(browser)
-    
+
     print("spyder finished!")
