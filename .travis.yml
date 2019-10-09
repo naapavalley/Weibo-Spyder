@@ -1,0 +1,14 @@
+language: generic
+sudo: false
+
+branches:
+  only:
+    - master
+    - source
+    # 这里可以添加你要监控哪些branch
+
+before_install:
+ - git clone https://github.com/nasfarley88/habash
+
+script:
+- ./habash/habash up "<你自己的Habit任务描述>"
