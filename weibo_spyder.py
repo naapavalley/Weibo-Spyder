@@ -12,7 +12,8 @@ from scipy import *
 import time
 import re
 
-fileName = 'cuiyutao.txt'
+niCheng = 'big4parttime'
+fileName = niCheng + '.txt'
 
 def simulate_logging():
     try:
@@ -41,12 +42,11 @@ def simulate_logging():
     finally:
         print('完成登陆!')
         return browser
+
 def spyder_weibo(browser):
     # 本文是以GUCCI为例，GUCCI的用户id为‘GUCCI’
-    id = 'cuiyutao'
-    niCheng = id
     # 用户的url结构为 url = 'http://weibo.cn/' + id
-    url = 'http://weibo.cn/' + id
+    url = 'http://weibo.cn/' + niCheng
     browser.get(url)
     time.sleep(3)
     # 使用BeautifulSoup解析网页的HTML
@@ -71,7 +71,7 @@ def spyder_weibo(browser):
     # 通过循环来抓取每一页数据
     for i in range(1, int(pageSize) + 1):  # pageSize+1
      # 每一页数据的url结构为 url = 'http://weibo.cn/' + id + ‘?page=’ + i
-        url = 'https://weibo.cn/cuiyutao?page=' + str(i)
+        url = 'https://weibo.cn/'+ niCheng + '?page=' + str(i)
         browser.get(url)
         time.sleep(1)
         # 使用BeautifulSoup解析网页的HTML
