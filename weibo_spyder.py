@@ -15,7 +15,7 @@ import re
 
 niCheng = 'big4parttime'
 fileName = niCheng + '.txt'
-
+# todo 增加自动爬取图片的功能
 def simulate_logging():
     try:
         print(u'登陆新浪微博手机端...')
