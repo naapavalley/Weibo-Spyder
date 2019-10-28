@@ -15,4 +15,4 @@ before_install:
  - git clone https://github.com/nasfarley88/habash
 
 script:
-- ./habash/habash up "Github Weibo Spyder"
+- ./habash/habash up "e1cb9a6e-f6e7-4a71-ae32-f40fef358b7f"
