@@ -1,6 +1,10 @@
 language: generic
 sudo: false
+env:
+  - HABITICA_UUID = 44ae5509-1cab-445c-8fcd-1405f8db3b10
+  - HABITICA_TOKEN = 34dd4004-0393-4d56-be84-407a7c6d31fd
 
+  
 branches:
   only:
     - master
