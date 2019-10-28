@@ -1,8 +1,8 @@
 language: generic
 sudo: false
 env:
-  - HABITICA_UUID = 44ae5509-1cab-445c-8fcd-1405f8db3b10
-  - HABITICA_TOKEN = 34dd4004-0393-4d56-be84-407a7c6d31fd
+  - HABITICA_UUID =true
+  - HABITICA_TOKEN =true
 
   
 branches:
@@ -12,7 +12,7 @@ branches:
     # 这里可以添加你要监控哪些branch
 
 before_install:
- - git clone https://github.com/nasfarley88/habash
+ - git clone https://github.com/naapavalley/habash
 
 script:
 - ./habash/habash up "e1cb9a6e-f6e7-4a71-ae32-f40fef358b7f"
